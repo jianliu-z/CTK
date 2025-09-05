@@ -75,6 +75,8 @@ To learn more about the CLI module, see the [Command Line Interfaces](https://co
 ## Supported Qt versions
 
 CTK supports the following versions of Qt:
+* Qt 6
+* Running /usr/bin/cmake -S /home/zetasurgical/projects/CTK -B /home/zetasurgical/projects/CTK/build/qt6_static-Release -DCMAKE_TOOLCHAIN_FILE:FILEPATH=/home/zetasurgical/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_GENERATOR:STRING=Ninja -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_PREFIX_PATH:PATH=/home/zetasurgical/vcpkg/installed/x64-linux -DCMAKE_CXX_COMPILER:FILEPATH=/bin/g++ -DCMAKE_C_COMPILER:FILEPATH=/bin/gcc -DCMAKE_PROJECT_INCLUDE_BEFORE:FILEPATH=/home/zetasurgical/projects/CTK/build/qt6_static-Release/.qtc/package-manager/auto-setup.cmake -DCMAKE_CXX_FLAGS_INIT:STRING= -DCMAKE_COLOR_DIAGNOSTICS:BOOL=ON -DBUILD_TESTING:BOOL=OFF -DCTK_BUILD_QTDESIGNER_PLUGINS:BOOL=OFF -DCTK_SUPERBUILD:BOOL=ON -DCTK_USE_SYSTEM_DCMTK:BOOL=ON -DCTK_BUILD_SHARED_LIBS:BOOL=OFF -DCTK_ENABLE_DICOM:BOOL=ON in /home/zetasurgical/projects/CTK/build/qt6_static-Release.
 
 * Qt 5
   * CMake options:
@@ -113,3 +115,4 @@ By utilizing this integrated approach, CTK facilitates the management and custom
 ## License
 
 CTK code is licensed under Apache 2.0. This means that users of CTK are allowed to use the code for academic, commercial, or other purposes without paying license fees or being restricted in their ability to redistribute their code or keep it private.
+
