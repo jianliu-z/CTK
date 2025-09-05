@@ -48,6 +48,6 @@ function(_ctk_generate_mocs)
 endfunction()
 
 # create a Qt5 alias
-macro(QT5_GENERATE_MOCS)
+macro(QT_GENERATE_MOCS)
   _ctk_generate_mocs(${ARGN})
 endmacro()

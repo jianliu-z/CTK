@@ -116,18 +116,30 @@ ${${MY_EXPORT_CUSTOM_CONTENT_FROM_VARIABLE}}
       foreach(moc_src ${MY_MOC_SRCS})
         qt5_wrap_cpp(MY_MOC_CPP ${moc_src} OPTIONS -f${moc_src} OPTIONS -DHAVE_QT5)
       endforeach()
+
+    elseif(CTK_QT_VERSION VERSION_EQUAL "6")
+      foreach(moc_src ${MY_MOC_SRCS})
+        qt6_wrap_cpp(MY_MOC_CPP ${moc_src} OPTIONS -f${moc_src} OPTIONS -DHAVE_QT6)
+      endforeach()
     else()
       message(FATAL_ERROR "Support for Qt${CTK_QT_VERSION} is not implemented")
     endif()
   endif()
   if(MY_GENERATE_MOC_SRCS)
-    QT5_GENERATE_MOCS(${MY_GENERATE_MOC_SRCS})
+    QT_GENERATE_MOCS(${MY_GENERATE_MOC_SRCS})
   endif()
   if(CTK_QT_VERSION VERSION_EQUAL "5")
     if(Qt5Widgets_FOUND)
       qt5_wrap_ui(MY_UI_CPP ${MY_UI_FORMS})
     elseif(MY_UI_FORMS)
-      message(WARNING "Argument UI_FORMS ignored because Qt5Widgets module was not specified")
+      message(WARNING "Argument UI_FORMS ignored because Qt${CTK_QT_VERSION}Widgets module was not specified")
+    endif()
+
+  elseif(CTK_QT_VERSION VERSION_EQUAL "6")
+    if(Qt6Widgets_FOUND)
+      qt6_wrap_ui(MY_UI_CPP ${MY_UI_FORMS})
+    elseif(MY_UI_FORMS)
+      message(WARNING "Argument UI_FORMS ignored because Qt${CTK_QT_VERSION}Widgets module was not specified")
     endif()
   else()
     message(FATAL_ERROR "Support for Qt${CTK_QT_VERSION} is not implemented")
@@ -136,6 +148,8 @@ ${${MY_EXPORT_CUSTOM_CONTENT_FROM_VARIABLE}}
   if(DEFINED MY_RESOURCES AND NOT MY_RESOURCES STREQUAL "")
     if(CTK_QT_VERSION VERSION_EQUAL "5")
       qt5_add_resources(MY_QRC_SRCS ${MY_RESOURCES})
+    elseif(CTK_QT_VERSION VERSION_EQUAL "6")
+      qt6_add_resources(MY_QRC_SRCS ${MY_RESOURCES})
     else()
       message(FATAL_ERROR "Support for Qt${CTK_QT_VERSION} is not implemented")
     endif()
@@ -159,7 +173,14 @@ ${${MY_EXPORT_CUSTOM_CONTENT_FROM_VARIABLE}}
     ${MY_UI_CPP}
     ${MY_QRC_SRCS}
     )
-
+  target_include_directories(${lib_name}
+    PUBLIC
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+    PRIVATE
+      ${my_includes}
+    )
+  message("binary dir ${CMAKE_CURRENT_BINARY_DIR}")
   # Set labels associated with the target.
   set_target_properties(${lib_name} PROPERTIES LABELS ${lib_name})
 
@@ -191,7 +212,7 @@ ${${MY_EXPORT_CUSTOM_CONTENT_FROM_VARIABLE}}
   if(MINGW)
     list(APPEND my_libs ssp) # add stack smash protection lib
   endif()
-  target_link_libraries(${lib_name} ${my_libs})
+  target_link_libraries(${lib_name} PUBLIC ${my_libs})
 
   # Update CTK_BASE_LIBRARIES
   set(CTK_BASE_LIBRARIES ${my_libs} ${lib_name} CACHE INTERNAL "CTK base libraries" FORCE)

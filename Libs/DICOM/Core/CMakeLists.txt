@@ -171,7 +171,7 @@ set(KIT_resources
 # Target libraries - See CMake/ctkFunctionGetTargetLibraries.cmake
 # The following macro will read the target libraries from the file 'target_libraries.cmake'
 ctkFunctionGetTargetLibraries(KIT_target_libraries)
-
+find_package(DCMTK REQUIRED)
 # Support namespaced DCMTK targets
 set(_target_libraries)
 foreach(target_library IN LISTS KIT_target_libraries)
@@ -183,7 +183,9 @@ foreach(target_library IN LISTS KIT_target_libraries)
 endforeach()
 set(KIT_target_libraries ${_target_libraries})
 
-list(APPEND KIT_target_libraries Qt${CTK_QT_VERSION}::Sql Qt${CTK_QT_VERSION}::Svg)
+
+list(APPEND KIT_target_libraries DCMTK::oflog
+  DCMTK::ofstd DCMTK::dcmdata ${DCMTK_LIBRARIES} Qt${CTK_QT_VERSION}::Sql Qt${CTK_QT_VERSION}::Svg Qt${CTK_QT_VERSION}::Core5Compat)
 
 # create a dcm query/retrieve service config file that points to the build dir
 set (DCMQRSCP_STORE_DIR ${CMAKE_CURRENT_BINARY_DIR}/Testing)
@@ -199,7 +201,7 @@ ctkMacroBuildLib(
   RESOURCES ${KIT_resources}
   LIBRARY_TYPE ${CTK_LIBRARY_MODE}
   )
-
+target_include_directories(${PROJECT_NAME} PUBLIC ${DCMTK_INCLUDE_DIRS})
 if(DEFINED DCMTK_HAVE_CONFIG_H_OPTIONAL AND NOT DCMTK_HAVE_CONFIG_H_OPTIONAL)
   # Workaround Debian packaging issue - See FindDCMTK.cmake for more details
   set_target_properties(${PROJECT_NAME} PROPERTIES INTERFACE_COMPILE_DEFINITIONS ${DCMTK_DEFINITIONS})

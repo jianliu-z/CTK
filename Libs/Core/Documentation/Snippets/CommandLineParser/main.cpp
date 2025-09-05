@@ -3,7 +3,7 @@
 
 #include <QCoreApplication>
 #include <QTextStream>
-
+#include <QIODevice>
 #include <cstdlib>
 
 int main(int argc, char** argv)

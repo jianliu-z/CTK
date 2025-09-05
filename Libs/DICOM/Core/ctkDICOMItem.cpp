@@ -27,7 +27,7 @@
 #include <dcmtk/dcmdata/dcistrmb.h>
 
 #include <stdexcept>
-
+#include <QTextDecoder>
 
 class ctkDICOMItemPrivate
 {

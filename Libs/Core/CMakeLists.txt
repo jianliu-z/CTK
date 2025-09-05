@@ -156,7 +156,7 @@ set(KIT_target_libraries)
 
 ctkFunctionGetTargetLibraries(KIT_target_libraries)
 
-list(APPEND KIT_target_libraries Qt${CTK_QT_VERSION}::Core)
+list(APPEND KIT_target_libraries Qt${CTK_QT_VERSION}::Core Qt${CTK_QT_VERSION}::Core5Compat Qt${CTK_QT_VERSION}::StateMachine)
 
 ctkMacroBuildLib(
   NAME ${PROJECT_NAME}
@@ -167,17 +167,23 @@ ctkMacroBuildLib(
   TARGET_LIBRARIES ${KIT_target_libraries}
   RESOURCES ${KIT_resources}
   LIBRARY_TYPE ${CTK_LIBRARY_MODE}
-  )
+)
+
+target_include_directories(CTKCore
+  PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<INSTALL_INTERFACE:include> # Path after installation
+)
 
 # Needed for ctkBackTrace
 if(UNIX)
   # FreeBSD: The same functionality that is in linux's libdl is provided in FreeBSD's libc
   find_library(HAVE_LIBDL dl)
   if(HAVE_LIBDL)
-    target_link_libraries(${PROJECT_NAME} dl)
+    target_link_libraries(${PROJECT_NAME} PUBLIC dl)
   endif()
 elseif(WIN32 AND NOT MINGW)
-  target_link_libraries(${PROJECT_NAME} dbghelp)
+  target_link_libraries(${PROJECT_NAME} PUBLIC dbghelp)
 endif()
 
 if(CTK_WRAP_PYTHONQT_LIGHT)

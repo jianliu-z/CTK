@@ -64,7 +64,7 @@ endif()
 #
 set(CTK_LIBRARY_MODE "SHARED")
 
-option(CTK_BUILD_SHARED_LIBS "Build CTK libraries as shared module." ON)
+option(CTK_BUILD_SHARED_LIBS "Build CTK libraries as shared module." OFF)
 mark_as_advanced(CTK_BUILD_SHARED_LIBS)
 mark_as_superbuild(CTK_BUILD_SHARED_LIBS)
 if(NOT CTK_BUILD_SHARED_LIBS)
@@ -104,9 +104,9 @@ mark_as_advanced(CTK_SUPERBUILD)
 #-----------------------------------------------------------------------------
 # Qt version
 #
-set(CTK_QT_VERSION "5" CACHE STRING "Expected Qt version")
+set(CTK_QT_VERSION "6" CACHE STRING "Expected Qt version")
 mark_as_advanced(CTK_QT_VERSION)
-set_property(CACHE CTK_QT_VERSION PROPERTY STRINGS 5)
+set_property(CACHE CTK_QT_VERSION PROPERTY STRINGS 6)
 mark_as_superbuild(CTK_QT_VERSION)
 
 #-----------------------------------------------------------------------------
@@ -459,7 +459,7 @@ mark_as_advanced(CMAKE_INSTALL_PREFIX)
 mark_as_advanced(DART_TESTING_TIMEOUT)
 
 # Qt Designer Plugins
-option(CTK_BUILD_QTDESIGNER_PLUGINS "Build Qt Designer plugins" ON)
+option(CTK_BUILD_QTDESIGNER_PLUGINS "Build Qt Designer plugins" OFF)
 mark_as_advanced(CTK_BUILD_QTDESIGNER_PLUGINS)
 mark_as_superbuild(CTK_BUILD_QTDESIGNER_PLUGINS)
 
@@ -479,7 +479,7 @@ ctk_lib_option(Widgets
                CTK_ENABLE_Widgets OR (CTK_ENABLE_DICOMApplicationHosting AND CTK_BUILD_EXAMPLES) OR CTK_USE_QTTESTING)
 
 ctk_lib_option(DICOM/Core
-               "Build the DICOM Core library" OFF
+               "Build the DICOM Core library" ON
                CTK_ENABLE_DICOM OR (CTK_ENABLE_DICOMApplicationHosting AND CTK_BUILD_EXAMPLES))
 
 ctk_lib_option(DICOM/Widgets
@@ -835,7 +835,7 @@ find_program(DGraph_EXECUTABLE DGraph
   "${CTK_BINARY_DIR}/Utilities/DGraph/Debug/"
   "${CTK_BINARY_DIR}/Utilities/DGraph/Release/")
 mark_as_advanced(DGraph_EXECUTABLE)
-
+#[[
 # Set optional dependencies not captured in 'target_libraries.cmake' files.
 if(CTK_LIB_Scripting/Python/Core AND CTK_LIB_Scripting/Python/Core_PYTHONQT_USE_VTK)
   set(ctkSimplePythonShell_OPTIONAL_DEPENDENCIES CTKVisualizationVTKCore VTK_LIBRARIES)
@@ -855,7 +855,7 @@ endif()
 ctkFunctionGenerateDGraphInput(${CTK_BINARY_DIR} "${target_directories}")
 ctkFunctionGenerateDGraphInput(${CTK_BINARY_DIR} "${target_directories}" WITH_EXTERNALS)
 ctkMacroValidateBuildOptions("${CTK_BINARY_DIR}" "${DGraph_EXECUTABLE}" "${target_directories}")
-
+]]
 #-----------------------------------------------------------------------------
 # CTK Python wrapping
 # Enable CTK_LIB_Scripting/Python/Core if CTK_ENABLE_Python_Wrapping is ON
